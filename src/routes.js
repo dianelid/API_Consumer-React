@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 
-import Home from './pages/empresas';
+import Home from './pages/home';
+import Empresas from './pages/empresas';
 import Fornecedores from './pages/fornecedores';
 
 const Routes = () => {
@@ -9,6 +10,7 @@ const Routes = () => {
     <BrowserRouter basename={process.env.REACT_APP_BASE_URI}>
       <Switch>
         <Route path="/" exact component={Home} />
+        <Route path="/empresas" component={Empresas} />
         <Route path="/fornecedores" component={Fornecedores} />
         <Route render={() => <h1>Página não encontrada! :(</h1>} />
       </Switch>
