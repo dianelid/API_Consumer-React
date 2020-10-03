@@ -1,15 +1,19 @@
 import { NotificationManager } from 'react-notifications';
 
-const saveEmpresa = async (empresa) => {
+const crudEmpresa = async (empresa, toDelete) => {
   
-  if(!(empresa.nomeFantasia && empresa.uf && empresa.cnpj)) {
+  if(!toDelete && !(empresa.nomeFantasia && empresa.uf && empresa.cnpj)) {
     NotificationManager.error('Informações obrigatórias: Nome fantasia, UF e CNPJ.');
     return;
   }
 
+  const urlBase = 'http://localhost:3001/empresas';
+  const url = empresa.id ? urlBase + "/" + empresa.id : urlBase;
+  const method = empresa.id ? (toDelete ? "DELETE": "PUT") : "POST";
+
   try {
-    const response = await fetch('http://localhost:3001/empresas', {
-      method: "POST",
+    const response = await fetch(url, {
+      method: method,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -24,4 +28,4 @@ const saveEmpresa = async (empresa) => {
   }
 }
 
-export default saveEmpresa;
+export default crudEmpresa;

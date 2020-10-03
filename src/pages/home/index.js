@@ -77,13 +77,8 @@ const Home = () => {
         </Grid>
         <Grid item className="table" xs={10}>
           {selectedMenu === 1 ? 
-          <Empresas 
-            modalEmpresaOpen={modalEmpresaOpen}
-            setModalEmpresaOpen={setModalEmpresaOpen}
-            empresa={empresa}
-            setEmpresa={setEmpresa}
-          /> : 
-          <Fornecedores />}
+          <Empresas empresa={empresa} setModalEmpresaOpen={setModalEmpresaOpen} setEmpresa={setEmpresa} /> : 
+          <Fornecedores fornecedor={fornecedor} setModalFornecedorOpen={setModalFornecedorOpen} setFornecedor={setFornecedor} />}
         </Grid>
       </Grid>
       <ModalEmpresa

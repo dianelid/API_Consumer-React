@@ -12,7 +12,7 @@ import {
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import CloseIcon from '@material-ui/icons/Close';
 import { bool, func, string, shape } from 'prop-types';
-import saveFornecedor from './saveFornecedor';
+import crudFornecedor from './crudFornecedor';
 
 const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setModalFornecedorOpen }) => {
 
@@ -24,8 +24,8 @@ const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setMo
           variant="outlined"
           fullWidth
           name="nome"
-          value={(fornecedor && fornecedor.nomeFantasia) || ''}
-          onChange={e => setFornecedor({...fornecedor, nomeFantasia: e.target.value})}
+          value={(fornecedor && fornecedor.nome) || ''}
+          onChange={e => setFornecedor({...fornecedor, nome: e.target.value})}
         />
         <TextField
           label="Email"
@@ -44,14 +44,22 @@ const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setMo
           onChange={e => setFornecedor({...fornecedor, cpf_cnpj: e.target.value})}
         />
         <TextField
-          label="CPF / CNPJ"
+          label="RG"
           variant="outlined"
           fullWidth
           name="rg"
           value={(fornecedor && fornecedor.rg) || ''}
           onChange={e => setFornecedor({...fornecedor, rg: e.target.value})}
         />
-        <KeyboardDatePicker
+        <TextField
+          label="Data de Nascimento"
+          variant="outlined"
+          fullWidth
+          name="nascimento"
+          value={(fornecedor && fornecedor.nascimento) || ''}
+          onChange={e => setFornecedor({...fornecedor, nascimento: e.target.value})}
+        />
+        {/* <KeyboardDatePicker
           label="Date de Nascimento"
           disableToolbar
           variant="inline"
@@ -60,7 +68,7 @@ const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setMo
           name="nascimento"
           value={(fornecedor && fornecedor.nascimento) || ''}
           onChange={e => setFornecedor({...fornecedor, nascimento: e.target.value})}
-        />
+        /> */}
       </Grid>
     );
   };
@@ -77,7 +85,7 @@ const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setMo
       <DialogActions style={{padding: ".5rem 1.75rem"}}>
         <Grid container spacing={2} justify="flex-end">
           <Grid item>
-            <Button variant="outlined" color="primary" onClick={() => {saveFornecedor(fornecedor); setModalFornecedorOpen(false);}}>
+            <Button variant="outlined" color="primary" onClick={() => {crudFornecedor(fornecedor); setModalFornecedorOpen(false);}}>
               Salvar
             </Button>
           </Grid>

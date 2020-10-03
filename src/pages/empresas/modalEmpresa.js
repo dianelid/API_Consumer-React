@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { bool, func, string, shape } from 'prop-types';
-import saveEmpresa from './saveEmpresa';
+import crudEmpresa from './crudEmpresa';
 
 const ModalEmpresa = ({ empresa, setEmpresa, modalEmpresaOpen, setModalEmpresaOpen }) => {
 
@@ -39,7 +39,7 @@ const ModalEmpresa = ({ empresa, setEmpresa, modalEmpresaOpen, setModalEmpresaOp
           value={(empresa && empresa.uf) || ''}
           onChange={e => setEmpresa({...empresa, uf: e.target.value})}
         >
-          { UFs.map(uf => (<MenuItem value={uf}>{uf}</MenuItem>)) }
+          { UFs.map(uf => (<MenuItem key={uf} value={uf}>{uf}</MenuItem>)) }
         </Select>
         <TextField
           label="CNPJ"
@@ -65,7 +65,7 @@ const ModalEmpresa = ({ empresa, setEmpresa, modalEmpresaOpen, setModalEmpresaOp
       <DialogActions style={{padding: ".5rem 1.75rem"}}>
         <Grid container spacing={2} justify="flex-end">
           <Grid item>
-            <Button variant="outlined" color="primary" onClick={() => {saveEmpresa(empresa); setModalEmpresaOpen(false);}}>
+            <Button variant="outlined" color="primary" onClick={() => {crudEmpresa(empresa); setModalEmpresaOpen(false);}}>
               Salvar
             </Button>
           </Grid>

@@ -1,15 +1,19 @@
 import { NotificationManager } from 'react-notifications';
 
-const saveFornecedor = async (fornecedor) => {
+const crudFornecedor = async (fornecedor, toDelete) => {
   
-  if(!(fornecedor.nome && fornecedor.email && fornecedor.cpf_cnpj)) {
+  if(!toDelete && !(fornecedor.nome && fornecedor.email && fornecedor.cpf_cnpj)) {
     NotificationManager.error('Informações obrigatórias: Nome, email e CPF ou CNPJ.');
     return;
   }
 
+  const urlBase = 'http://localhost:3001/fornecedores';
+  const url = fornecedor.id ? urlBase + "/" + fornecedor.id : urlBase;
+  const method = fornecedor.id ? (toDelete ? "DELETE": "PUT") : "POST";
+
   try {
-    const response = await fetch('http://localhost:3001/fornecedores', {
-      method: "POST",
+    const response = await fetch(url, {
+      method: method,
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -24,4 +28,4 @@ const saveFornecedor = async (fornecedor) => {
   }
 }
 
-export default saveFornecedor;
+export default crudFornecedor;
