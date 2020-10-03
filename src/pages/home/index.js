@@ -9,7 +9,9 @@ import {
   Button,
 } from '@material-ui/core';
 import Empresas from '../empresas';
+import ModalEmpresa from '../empresas/modalEmpresa';
 import Fornecedores from '../fornecedores';
+import ModalFornecedor from '../fornecedores/modalFornecedor';
 
 const Home = () => {
   const MENU = [{
@@ -22,19 +24,36 @@ const Home = () => {
 
   const [selectedMenu, setSelectedMenu] = useState(1);
 
+  const [modalEmpresaOpen, setModalEmpresaOpen] = useState(false);
+  const [modalFornecedorOpen, setModalFornecedorOpen] = useState(false);
+  
+  const [empresa, setEmpresa] = useState({
+    nomeFantasia: '',
+    uf: '',
+    cnpj: '',
+  });
+
+  const [fornecedor, setFornecedor] = useState({
+    nome: '',
+    email: '',
+    cpf_cnpj: '',
+    rg: '',
+    nascimento: '',
+  });
+
   return (
     <Container>
       <div>
         <Button
           variant="contained"
           color="primary"
-          onClick={() => {  }}>
+          onClick={() => { setModalEmpresaOpen(true) }}>
             Cadastrar Empresa
         </Button>
         <Button 
           variant="contained"
           color="primary"
-          onClick={() => {  }}>
+          onClick={() => { setModalFornecedorOpen(true) }}>
             Cadastrar Fornecedor
         </Button>
       </div>
@@ -57,10 +76,28 @@ const Home = () => {
           </Box>
         </Grid>
         <Grid item className="table" xs={10}>
-          {selectedMenu === 1 ? <Empresas /> : <Fornecedores />}
+          {selectedMenu === 1 ? 
+          <Empresas 
+            modalEmpresaOpen={modalEmpresaOpen}
+            setModalEmpresaOpen={setModalEmpresaOpen}
+            empresa={empresa}
+            setEmpresa={setEmpresa}
+          /> : 
+          <Fornecedores />}
         </Grid>
       </Grid>
-      {/* <ModalDelete refetch={refetch} /> */}
+      <ModalEmpresa
+        modalEmpresaOpen={modalEmpresaOpen}
+        setModalEmpresaOpen={setModalEmpresaOpen}
+        empresa={empresa}
+        setEmpresa={setEmpresa}
+      />
+      <ModalFornecedor
+        modalFornecedorOpen={modalFornecedorOpen}
+        setModalFornecedorOpen={setModalFornecedorOpen}
+        fornecedor={fornecedor}
+        setFornecedor={setFornecedor}
+      />
     </Container>
   );
 };

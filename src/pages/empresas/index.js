@@ -5,9 +5,13 @@ import {
   TableCell, 
   TableBody, 
   TableHead,
+  IconButton,
 } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { bool, func, string, shape } from 'prop-types';
 
-const Empresas = () => {
+const Empresas = ({ empresa, setEmpresa, modalEmpresaOpen, setModalEmpresaOpen }) => {
 
   const [empresas, setEmpresas] = useState([]);
 
@@ -17,7 +21,7 @@ const Empresas = () => {
 
   const getEmpresas = async () => {
     try {
-      const response = await fetch('http://localhost:3000/empresas');
+      const response = await fetch('http://localhost:3001/empresas');
       const data = await response.json();
 
       setEmpresas(data);
@@ -25,10 +29,6 @@ const Empresas = () => {
       console.log(error);
     }
   }
-
-  // if (!empresas.data) {
-  //   return <Container><LinearProgress /></Container>;
-  // }
 
   return (
     <Table>
@@ -42,10 +42,18 @@ const Empresas = () => {
       <TableBody>
         {empresas.length > 0 ? (
           empresas.map(empresa => (
-            <TableRow /*onClick={() => {history.push('/questionBank');}}*/>
+            <TableRow>
               <TableCell>{empresa.nomeFantasia}</TableCell>
               <TableCell>{empresa.uf}</TableCell>
-              <TableCell>{empresa.cnpj}</TableCell>
+              <TableCell>
+                {empresa.cnpj}
+                <IconButton onClick={() => { setEmpresa(empresa); setModalEmpresaOpen(true); }}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton>
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
           ))
         ) : (
@@ -58,6 +66,18 @@ const Empresas = () => {
       </TableBody>
     </Table>
   );
+};
+
+Empresas.propTypes = {
+  empresa: shape({
+    id: string,
+    nomeFantasia: string,
+    uf: string,
+    cnpj: string,
+  }).isRequired,
+  setEmpresa: func.isRequired,
+  modalEmpresaOpen: bool.isRequired,
+  setModalEmpresaOpen: func.isRequired,
 };
 
 export default Empresas;

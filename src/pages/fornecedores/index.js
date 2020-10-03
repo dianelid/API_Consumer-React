@@ -5,9 +5,13 @@ import {
   TableCell, 
   TableBody, 
   TableHead,
+  IconButton
 } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { bool, func, string, shape } from 'prop-types';
 
-const Fornecedores = () => {
+const Fornecedores = ({ fornecedor, setFornecedor, modalFornecedorOpen, setModalFornecedorOpen }) => {
 
   const [fornecedores, setFornecedores] = useState([]);
 
@@ -17,7 +21,7 @@ const Fornecedores = () => {
 
   const getFornecedores = async () => {
     try {
-      const response = await fetch('http://localhost:3000/fornecedores');
+      const response = await fetch('http://localhost:3001/fornecedores');
       const data = await response.json();
 
       setFornecedores(data);
@@ -40,12 +44,19 @@ const Fornecedores = () => {
       <TableBody>
         {fornecedores.length > 0 ? (
           fornecedores.map(fornecedore => (
-            <TableRow /*onClick={() => {history.push('/questionBank');}}*/>
+            <TableRow>
               <TableCell>{fornecedore.nome}</TableCell>
               <TableCell>{fornecedore.email}</TableCell>
               <TableCell>{fornecedore.cpf_cnpj}</TableCell>
               <TableCell>{fornecedore.rg}</TableCell>
-              <TableCell>{fornecedore.nascimento}</TableCell>
+              <TableCell>{fornecedore.nascimento}
+                <IconButton onClick={() => { setFornecedor(fornecedor); setModalFornecedorOpen(true); }}>
+                  <EditIcon />
+                </IconButton>
+                <IconButton>
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
           ))
         ) : (
@@ -58,6 +69,20 @@ const Fornecedores = () => {
       </TableBody>
     </Table>
   );
+};
+
+Fornecedores.propTypes = {
+  fornecedor: shape({
+    id: string,
+    nome: string,
+    email: string,
+    cpf_cnpj: string,
+    rg: string,
+    nascimento: string,
+  }).isRequired,
+  setFornecedor: func.isRequired,
+  modalFornecedorOpen: bool.isRequired,
+  setModalFornecedorOpen: func.isRequired,
 };
 
 export default Fornecedores;
