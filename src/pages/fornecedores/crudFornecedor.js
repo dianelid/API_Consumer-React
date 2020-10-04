@@ -1,6 +1,6 @@
 import { NotificationManager } from 'react-notifications';
 
-const crudFornecedor = async (fornecedor, toDelete) => {
+const crudFornecedor = async (fornecedor, setRefetch, toDelete) => {
   
   if(!toDelete && !(fornecedor.nome && fornecedor.email && fornecedor.cpf_cnpj)) {
     NotificationManager.error('Informações obrigatórias: Nome, email e CPF ou CNPJ.');
@@ -20,8 +20,9 @@ const crudFornecedor = async (fornecedor, toDelete) => {
       },
       body: JSON.stringify(fornecedor)
     });
-    const data = await response.json();
 
+    const data = await response.json();
+    setRefetch(true);
     console.log(data);
   } catch (error) {
     console.log(error);

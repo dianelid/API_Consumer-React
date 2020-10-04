@@ -1,6 +1,6 @@
 import { NotificationManager } from 'react-notifications';
 
-const crudEmpresa = async (empresa, toDelete) => {
+const crudEmpresa = async (empresa, setRefetch, toDelete) => {
   
   if(!toDelete && !(empresa.nomeFantasia && empresa.uf && empresa.cnpj)) {
     NotificationManager.error('Informações obrigatórias: Nome fantasia, UF e CNPJ.');
@@ -20,8 +20,9 @@ const crudEmpresa = async (empresa, toDelete) => {
       },
       body: JSON.stringify(empresa)
     });
+    
     const data = await response.json();
-
+    setRefetch(true);
     console.log(data);
   } catch (error) {
     console.log(error);

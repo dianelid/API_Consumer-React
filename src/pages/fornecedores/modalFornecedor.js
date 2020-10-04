@@ -14,7 +14,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { bool, func, string, shape } from 'prop-types';
 import crudFornecedor from './crudFornecedor';
 
-const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setModalFornecedorOpen }) => {
+const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setModalFornecedorOpen, setRefetch }) => {
 
   const renderContent = () => {
     return (
@@ -22,6 +22,7 @@ const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setMo
         <TextField
           label="Nome"
           variant="outlined"
+          margin="dense"
           fullWidth
           name="nome"
           value={(fornecedor && fornecedor.nome) || ''}
@@ -30,6 +31,7 @@ const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setMo
         <TextField
           label="Email"
           variant="outlined"
+          margin="dense"
           fullWidth
           name="email"
           value={(fornecedor && fornecedor.email) || ''}
@@ -38,6 +40,7 @@ const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setMo
         <TextField
           label="CPF / CNPJ"
           variant="outlined"
+          margin="dense"
           fullWidth
           name="cpf_cnpj"
           value={(fornecedor && fornecedor.cpf_cnpj) || ''}
@@ -46,6 +49,7 @@ const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setMo
         <TextField
           label="RG"
           variant="outlined"
+          margin="dense"
           fullWidth
           name="rg"
           value={(fornecedor && fornecedor.rg) || ''}
@@ -54,6 +58,7 @@ const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setMo
         <TextField
           label="Data de Nascimento"
           variant="outlined"
+          margin="dense"
           fullWidth
           name="nascimento"
           value={(fornecedor && fornecedor.nascimento) || ''}
@@ -76,8 +81,11 @@ const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setMo
   return (
     <Dialog open={modalFornecedorOpen} onClose={() => setModalFornecedorOpen(false)}>
       <DialogTitle>
-        <div className="title">{fornecedor && fornecedor.id ? 'Alterar Empresa' : 'Cadastrar Empresa'}</div>
-        <IconButton onClick={() => setModalFornecedorOpen(false)}><CloseIcon /></IconButton>
+        {fornecedor && fornecedor.id ? 'Alterar Empresa' : 'Cadastrar Empresa'}
+        <IconButton
+          style={{float: "right"}}
+          onClick={() => setModalFornecedorOpen(false)}><CloseIcon />
+        </IconButton>
       </DialogTitle>
       <DialogContent>
         <Grid container spacing={2} style={{height: "100%"}}>{renderContent()}</Grid>
@@ -85,7 +93,7 @@ const ModalFornecedor = ({ fornecedor, setFornecedor, modalFornecedorOpen, setMo
       <DialogActions style={{padding: ".5rem 1.75rem"}}>
         <Grid container spacing={2} justify="flex-end">
           <Grid item>
-            <Button variant="outlined" color="primary" onClick={() => {crudFornecedor(fornecedor); setModalFornecedorOpen(false);}}>
+            <Button variant="contained" color="primary" onClick={() => {crudFornecedor(fornecedor, setRefetch); setModalFornecedorOpen(false);}}>
               Salvar
             </Button>
           </Grid>
@@ -107,6 +115,7 @@ ModalFornecedor.propTypes = {
   setFornecedor: func.isRequired,
   modalFornecedorOpen: bool.isRequired,
   setModalFornecedorOpen: func.isRequired,
+  setRefetch: func.isRequired
 };
 
 export default ModalFornecedor;

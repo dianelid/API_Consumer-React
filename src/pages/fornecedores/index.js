@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import {
   Table, 
-  TableRow, 
-  TableCell, 
-  TableBody, 
-  TableHead,
+  TableBody,
   IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
+  Button
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { func, string, shape } from 'prop-types';
+import { bool, func, string, shape } from 'prop-types';
 import crudFornecedor from './crudFornecedor';
+import {
+  StyledTableCell, StyledTableRow, StyledTableHead,
+} from '../home/styles';
 
-const Fornecedores = ({ fornecedor, setFornecedor, setModalFornecedorOpen }) => {
+const Fornecedores = ({ fornecedor, setFornecedor, setModalFornecedorOpen, refetch, setRefetch }) => {
 
   const [fornecedores, setFornecedores] = useState([]);
   const [openDelete, setOpenDelete] = useState(false);
 
   useEffect(() => {
     getFornecedores();
-  }, [setFornecedores]);
+  }, [refetch]);
 
   const getFornecedores = async () => {
     try {
@@ -32,6 +32,7 @@ const Fornecedores = ({ fornecedor, setFornecedor, setModalFornecedorOpen }) => 
       const data = await response.json();
 
       setFornecedores(data);
+      setRefetch(false);
     } catch (error) {
       console.log(error);
     }
@@ -40,39 +41,39 @@ const Fornecedores = ({ fornecedor, setFornecedor, setModalFornecedorOpen }) => 
   return (
     <>
       <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell> Nome </TableCell>
-            <TableCell> Email </TableCell>
-            <TableCell> CPF/CNJP </TableCell>
-            <TableCell> RG </TableCell>
-            <TableCell> Data de Nascimento </TableCell>
-          </TableRow>
-        </TableHead>
+        <StyledTableHead>
+          <StyledTableRow>
+            <StyledTableCell> Nome </StyledTableCell>
+            <StyledTableCell> Email </StyledTableCell>
+            <StyledTableCell> CPF/CNJP </StyledTableCell>
+            <StyledTableCell> RG </StyledTableCell>
+            <StyledTableCell> Data de Nascimento </StyledTableCell>
+          </StyledTableRow>
+        </StyledTableHead>
         <TableBody>
           {fornecedores.length > 0 ? (
             fornecedores.map(fornecedor => (
-              <TableRow key={fornecedor.id}>
-                <TableCell>{fornecedor.nome}</TableCell>
-                <TableCell>{fornecedor.email}</TableCell>
-                <TableCell>{fornecedor.cpf_cnpj}</TableCell>
-                <TableCell>{fornecedor.rg}</TableCell>
-                <TableCell>{fornecedor.nascimento}
+              <StyledTableRow key={fornecedor.id}>
+                <StyledTableCell>{fornecedor.nome}</StyledTableCell>
+                <StyledTableCell>{fornecedor.email}</StyledTableCell>
+                <StyledTableCell>{fornecedor.cpf_cnpj}</StyledTableCell>
+                <StyledTableCell>{fornecedor.rg}</StyledTableCell>
+                <StyledTableCell>{fornecedor.nascimento}
                   <IconButton onClick={() => { setFornecedor(fornecedor); setModalFornecedorOpen(true); }}>
                     <EditIcon />
                   </IconButton>
                   <IconButton onClick={() => { setFornecedor(fornecedor); setOpenDelete(true); }}>
                     <DeleteIcon />
                   </IconButton>
-                </TableCell>
-              </TableRow>
+                </StyledTableCell>
+              </StyledTableRow>
             ))
           ) : (
-            <TableRow>
-              <TableCell colSpan={10} align="center">
+            <StyledTableRow>
+              <StyledTableCell colSpan={10} align="center">
                 Nenhuma fornecedor cadastrado.
-              </TableCell>
-            </TableRow>
+              </StyledTableCell>
+            </StyledTableRow>
           )}
         </TableBody>
       </Table>
@@ -85,7 +86,7 @@ const Fornecedores = ({ fornecedor, setFornecedor, setModalFornecedorOpen }) => 
           Tem certeza que deseja remover este fornecedor?
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => {crudFornecedor(fornecedor, openDelete); setOpenDelete(false)}} color="primary" variant="contained">
+          <Button onClick={() => {crudFornecedor(fornecedor, setRefetch, openDelete); setOpenDelete(false)}} color="primary" variant="contained">
             Remover
           </Button>
           <Button onClick={() => setOpenDelete(false)} color="primary" variant="contained">
@@ -108,6 +109,8 @@ Fornecedores.propTypes = {
   }),
   setFornecedor: func.isRequired,
   setModalFornecedorOpen: func.isRequired,
+  refetch: bool.isRequired,
+  setRefetch: func.isRequired
 };
 
 Fornecedores.propTypes = {

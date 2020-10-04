@@ -1,37 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Table, 
-  TableRow, 
-  TableCell, 
-  TableBody, 
-  TableHead,
+  Table,
+  TableBody,
   IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
+  Button
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { func, string, shape } from 'prop-types';
+import { bool, func, string, shape } from 'prop-types';
 import crudEmpresa from './crudEmpresa';
+import {
+  StyledTableCell, StyledTableRow, StyledTableHead,
+} from '../home/styles';
 
-const Empresas = ({ empresa, setEmpresa, setModalEmpresaOpen }) => {
+const Empresas = ({ empresa, setEmpresa, setModalEmpresaOpen, refetch, setRefetch }) => {
 
   const [empresas, setEmpresas] = useState([]);
   const [openDelete, setOpenDelete] = useState(false);
+  
 
   useEffect(() => {
     getEmpresas();
-  }, [setEmpresas]);
+  }, [refetch]);
 
   const getEmpresas = async () => {
     try {
       const response = await fetch('http://localhost:3001/empresas');
       const data = await response.json();
-
+      console.log(data);
       setEmpresas(data);
+      setRefetch(false);
     } catch (error) {
       console.log(error);
     }
@@ -40,20 +42,20 @@ const Empresas = ({ empresa, setEmpresa, setModalEmpresaOpen }) => {
   return (
     <>
       <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell> Nome Fantasia </TableCell>
-            <TableCell> UF </TableCell>
-            <TableCell> CNPJ </TableCell>
-          </TableRow>
-        </TableHead>
+        <StyledTableHead>
+          <StyledTableRow>
+            <StyledTableCell> Nome Fantasia </StyledTableCell>
+            <StyledTableCell> UF </StyledTableCell>
+            <StyledTableCell> CNPJ </StyledTableCell>
+          </StyledTableRow>
+        </StyledTableHead>
         <TableBody>
           {empresas.length > 0 ? (
             empresas.map(empresa => (
-              <TableRow key={empresa.id}>
-                <TableCell>{empresa.nomeFantasia}</TableCell>
-                <TableCell>{empresa.uf}</TableCell>
-                <TableCell>
+              <StyledTableRow key={empresa.id}>
+                <StyledTableCell>{empresa.nomeFantasia}</StyledTableCell>
+                <StyledTableCell>{empresa.uf}</StyledTableCell>
+                <StyledTableCell>
                   {empresa.cnpj}
                   <IconButton onClick={() => { setEmpresa(empresa); setModalEmpresaOpen(true); }}>
                     <EditIcon />
@@ -61,15 +63,15 @@ const Empresas = ({ empresa, setEmpresa, setModalEmpresaOpen }) => {
                   <IconButton onClick={() => { setEmpresa(empresa); setOpenDelete(true); }}>
                     <DeleteIcon />
                   </IconButton>
-                </TableCell>
-              </TableRow>
+                </StyledTableCell>
+              </StyledTableRow>
             ))
           ) : (
-            <TableRow>
-              <TableCell colSpan={10} align="center">
+            <StyledTableRow>
+              <StyledTableCell colSpan={10} align="center">
                 Nenhuma empresa cadastrada.
-              </TableCell>
-            </TableRow>
+              </StyledTableCell>
+            </StyledTableRow>
           )}
         </TableBody>
       </Table>
@@ -82,7 +84,7 @@ const Empresas = ({ empresa, setEmpresa, setModalEmpresaOpen }) => {
           Tem certeza que deseja remover esta empresa?
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => {crudEmpresa(empresa, openDelete); setOpenDelete(false)}} color="primary" variant="contained">
+          <Button onClick={() => {crudEmpresa(empresa, setRefetch, openDelete); setOpenDelete(false)}} color="primary" variant="contained">
             Remover
           </Button>
           <Button onClick={() => setOpenDelete(false)} color="primary" variant="contained">
@@ -103,6 +105,8 @@ Empresas.propTypes = {
   }),
   setEmpresa: func.isRequired,
   setModalEmpresaOpen: func.isRequired,
+  refetch: bool.isRequired,
+  setRefetch: func.isRequired
 };
 
 Empresas.defaultProps = {
